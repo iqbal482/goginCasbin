@@ -11,19 +11,11 @@ import (
 )
 
 func DBConnection() (*gorm.DB, error) {
-	os.Setenv("DB_HOST", "postgresql.postgre.svc.cluster.local")
-	os.Setenv("DB_PORT", "5432")
-	os.Setenv("DB_USER", "postgres")
-	os.Setenv("DB_PASS", "postgres")
-	os.Setenv("DB_NAME", "gogin")
-
 	DB_HOST := "postgresql.postgre.svc.cluster.local"
 	DB_PORT := "5432"
 	DB_USER := "postgres"
 	DB_PASS := "q6PENVTLBW"
 	DB_NAME := "postgres"
-
-
 
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
