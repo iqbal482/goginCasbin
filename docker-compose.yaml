@@ -1,0 +1,57 @@
+version: '3'
+services:
+  app:
+    container_name: goginCasbin
+    build: .
+    ports:
+      - 8080:8080
+    restart: on-failure
+    volumes:
+      - .:/usr/src/app/
+    env_file:
+      - .env
+    depends_on:
+      - template-postgres
+    networks:
+      - template
+
+
+  template-postgres:
+    image: postgres:latest
+    container_name: startup_template_golang_db_postgres
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - '5642:5432'
+    volumes:
+      - database_postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - template
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - template-postgres
+    ports:
+      - "5050:80"
+    networks:
+      - template
+    restart: unless-stopped
+
+volumes:
+  api:
+  database_postgres:
+
+# Networks to be created to facilitate communication between containers
+networks:
+  startup_template:
+    driver: bridge
